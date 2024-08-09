@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Donation Platform</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Set the background image to cover the entire viewport */
+            background: url('C:\Users\VAMSI\OneDrive\Desktop\Vamsi_Capstone\public\food donation.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #f0f0f0;
+        }
+
+        header {
+            background-color: rgba(128, 0, 0, 0.7); /* Darker semi-transparent background */
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        button {
+            background-color: #800000;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #600000;
+            transform: scale(1.05);
+        }
+
+        .info-section {
+            padding: 30px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.7); /* Slightly darker for better contrast */
+            color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-section h2 {
+            margin-top: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .info-section p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Food Donation Platform
+    </header>
+    <div class="button-container">
+        <button id="home-button">Home</button>
+        <button id="about-button">About</button>
+        <button id="login-button">Login</button>
+        <button id="clothes-donation-button">Clothes Donation</button>
+        <button id="contact-us-button">Contact Us</button>
+    </div>
+    <div class="info-section">
+        <h2>Welcome to Our Food Donation Platform</h2>
+        <p>Our platform is dedicated to connecting generous food donors with those in need. Whether you have food to give away or you’re looking to donate food to a good cause, you’ve come to the right place. We facilitate donations to various charities and organizations, making it easy for you to contribute to the community.</p>
+        <p>Explore our services to find out how you can get involved, learn about our mission, or simply connect with us. Your support helps provide essential nourishment to communities across the country.</p>
+    </div>
+
+    <script>
+        document.getElementById('home-button').addEventListener('click', function() {
+            window.location.href = 'home.html';
+        });
+
+        document.getElementById('clothes-donation-button').addEventListener('click', function() {
+            window.location.href = 'Clothes-Donation.html';
+        });
+
+        document.getElementById('about-button').addEventListener('click', function() {
+            window.location.href = 'About.html';
+        });
+
+        document.getElementById('contact-us-button').addEventListener('click', function() {
+            window.location.href = 'Contact-us.html';
+        });
+
+        document.getElementById('login-button').addEventListener('click', function() {
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Donate Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    button {
+      background-color: #4CAF50;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px; /* Added margin for better spacing */
+    }
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <h1>Donate Page</h1>
+  <form id="donation-form">
+    <button type="button" id="Food-Donation-button">Food Donation</button>
+    <button type="button" id="Clothes-Donation-button">Clothes Donation</button>
+    <button type="button" id="Books-Donation-button">Books Donation</button>
+  </form>
+
+  <script>
+    // Add event listeners to the buttons
+    document.getElementById("Food-Donation-button").addEventListener("click", function(event) {
+      event.preventDefault();
+      window.location.href = "Food-Donation.html";
+    });
+    document.getElementById("Clothes-Donation-button").addEventListener("click", function(event) {
+      event.preventDefault();
+      window.location.href = "Clothes-Donation.html";
+    });
+    document.getElementById("Books-Donation-button").addEventListener("click", function(event) {
+      event.preventDefault();
+      window.location.href = "Books-Donation.html";
+    });
+  </script>
+</body>
+</html>
