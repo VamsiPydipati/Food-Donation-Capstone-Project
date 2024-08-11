@@ -181,10 +181,7 @@
                 <form id="locationForm" class="horizontal-group">
                     <select id="state" name="state" required onchange="updateCities()">
                         <option value="" disabled selected>Select State</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Karnataka">Karnataka</option>
-                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <!-- State options will be populated dynamically -->
                     </select>
                     <select id="city" name="city" required>
                         <option value="" disabled selected>Select City</option>
@@ -212,7 +209,7 @@
                                 <option value="Literature">Literature</option>
                                 <option value="History">History</option>
                             </select>
-                            <select name="language[]" class="plus-symbol" required>
+                            <select name="language[]" required class="plus-symbol">
                                 <option value="" disabled selected>Language</option>
                                 <option value="English">English</option>
                                 <option value="Spanish">Spanish</option>
@@ -224,7 +221,6 @@
 
                     <!-- Add Book Set Button -->
                     <button type="button" id="addBookSetBtn" onclick="addBookSet()">Add Another Book</button>
-            
                     
                     <textarea id="address" name="address" placeholder="Address" required class="full-width plus-symbol"></textarea>
                     <label>
@@ -259,13 +255,30 @@
     <script>
         let generatedOTP;
 
-        // Object containing cities for each state
-        const citiesByState = {
+        // Object containing states and cities
+        const statesAndCities = {
             "Delhi": ["Delhi"],
             "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
             "Karnataka": ["Bangalore", "Mysore", "Mangalore"],
-            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"]
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Tirupati"],
+            "Gujarat": ["Ahmedabad", "Gandhinagar", "Surat"],
+            "Telangana": ["Hyderabad"],
+            "West Bengal": ["Kolkata"]
         };
+
+        // Populate states select dropdown and sort options
+        function populateStates() {
+            const stateSelect = document.getElementById("state");
+            const states = Object.keys(statesAndCities).sort(); // Sort states alphabetically
+
+            states.forEach(state => {
+                const option = document.createElement("option");
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+        }
 
         function updateCities() {
             const stateSelect = document.getElementById("state");
@@ -275,9 +288,10 @@
             // Clear previous city options
             citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
 
-            // Populate city options based on selected state
-            if (citiesByState[selectedState]) {
-                citiesByState[selectedState].forEach(city => {
+            // Populate city options based on selected state and sort them
+            if (statesAndCities[selectedState]) {
+                const cities = statesAndCities[selectedState].sort(); // Sort cities alphabetically
+                cities.forEach(city => {
                     const option = document.createElement("option");
                     option.value = city;
                     option.textContent = city;
@@ -375,6 +389,9 @@
             document.getElementById("otpScreen").classList.add("hidden");
             document.getElementById("confirmationScreen").classList.add("hidden");
         }
+
+        // Populate states on page load
+        window.onload = populateStates;
     </script>
 </body>
 </html>
