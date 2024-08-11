@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothes Donation Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            width: 80%;
+            margin: 50px auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        header, footer {
+            background-color: #c68080;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #ba7676;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input, select, textarea, button {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #bd6363;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 15px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #bd6363;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+        }
+
+        label input {
+            margin-right: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .social {
+            background-color: #3b3b3b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .social a {
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .social a:hover {
+            color: #cccccc;
+        }
+
+        .message {
+            background-color: #f0f8ff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .book-set {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+        }
+
+        .book-set input, .book-set select {
+            flex: 1 1 20%;
+        }
+
+        .book-set .remove-btn {
+            background-color: #bd6363;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .book-set .remove-btn:hover {
+            background-color: #bd6363;
+        }
+
+        .horizontal-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .horizontal-group input, .horizontal-group select, .horizontal-group textarea, .horizontal-group button {
+            flex: 1;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .plus-symbol::after {
+            content: "+";
+            color: rgb(208, 137, 137);
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Donate Book</h1>
+        </header>
+        <div class="content">
+            <!-- Location Screen -->
+            <div id="locationScreen">
+                <h1>Donate </h1>Clothes
+                <p>Please help us in knowing your location so that we can show all book donation campaigns running in your chosen area.</p>
+                <form id="locationForm" class="horizontal-group">
+                    <select id="state" name="state" required>
+                        <option value="" disabled selected>Select State</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                    </select>
+                    <select id="city" name="city" required>
+                        <option value="" disabled selected>Select City</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                    </select>
+                    <button type="button" onclick="validateLocationForm()">Next</button>
+                </form>
+            </div>
+
+            <!-- Donation Form Screen -->
+            <div id="donationFormScreen" class="hidden">
+                <h1>Donate Clothes</h1>
+                <form id="donationForm">
+                    <div class="horizontal-group">
+                        <input type="text" id="donorName" name="donorName" placeholder="Name of the Donor" required class="plus-symbol">
+                        <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number" required class="plus-symbol">
+                    </div>
+                    <div id="clothesSetContainer">
+                        <div class="book-set">
+                            <input type="text" name="bookType[]" placeholder="Type Of Book" required>
+                            <select name="language[]" class="plus-symbol" required>
+                                <option value="" disabled selected>Language</option>
+                                <option value="English">English</option>
+                                <option value="Spanish">Spanish</option>
+                            </select>
+                            <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required class="plus-symbol">
+                            <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
+                        </div>
+                    </div>
+                    <input type="text" id="deliveryMode" name="deliveryMode" placeholder="Delivery Mode" class="full-width" required>
+                    <textarea id="address" name="address" placeholder="Address" required class="full-width plus-symbol"></textarea>
+                    <label>
+                        <input type="checkbox" id="terms" name="terms" required class="plus-symbol">
+                        Accept Terms & Conditions
+                    </label>
+                    <button type="button" onclick="sendOTP()">Next</button>
+                </form>
+            </div>
+
+            <!-- OTP Confirmation Screen -->
+            <div id="otpScreen" class="hidden">
+                <h1>OTP Confirmation</h1>
+                <p>Please enter the OTP sent to your mobile number.</p>
+                <form id="otpForm" class="horizontal-group">
+                    <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+                    <button type="button" onclick="validateOTP()">Confirm</button>
+                </form>
+            </div>
+
+            <!-- Confirmation Screen -->
+            <div id="confirmationScreen" class="hidden">
+                <div class="message">
+                    <h1>Thank You!</h1>
+                    <p>We have received your Clothes Donation Request and our team will shortly connect with you. Thank you and have a great day ahead!</p>
+                    <button onclick="goHome()">Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let generatedOTP;
+
+        function validateLocationForm() {
+            const state = document.getElementById('state').value;
+            const city = document.getElementById('city').value;
+            if (!state || !city) {
+                alert('Please select both state and city.');
+                return;
+            }
+            showDonationForm();
+        }
+
+        function showDonationForm() {
+            document.getElementById('locationScreen').classList.add('hidden');
+            document.getElementById('donationFormScreen').classList.remove('hidden');
+        }
+
+        function addBookSet() {
+            const bookSetContainer = document.getElementById('bookSetContainer');
+            const bookSet = document.createElement('div');
+            bookSet.classList.add('book-set');
+            bookSet.innerHTML = `
+                <input type="text" name="bookType[]" placeholder="Type Of Book" required>
+                <select name="language[]" class="plus-symbol" required>
+                    <option value="" disabled selected>Language</option>
+                    <option value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                </select>
+                <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required class="plus-symbol">
+                <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
+            `;
+            bookSetContainer.appendChild(bookSet);
+        }
+
+        function removeBookSet(button) {
+            const bookSet = button.parentElement;
+            bookSet.remove();
+        }
+
+        function sendOTP() {
+            const terms = document.getElementById('terms').checked;
+            if (!terms) {
+                alert('Please accept the terms and conditions.');
+                return;
+            }
+
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            if (mobileNumber) {
+                generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+                alert(`OTP sent to ${mobileNumber}: ${generatedOTP}`); // Simulate OTP sent. Replace with actual OTP sending logic.
+                showOTPScreen();
+            } else {
+                alert('Please enter your mobile number.');
+            }
+        }
+
+        function showOTPScreen() {
+            document.getElementById('donationFormScreen').classList.add('hidden');
+            document.getElementById('otpScreen').classList.remove('hidden');
+        }
+
+        function validateOTP() {
+            const enteredOTP = document.getElementById('otp').value;
+            if (enteredOTP === generatedOTP) {
+                showConfirmation();
+            } else {
+                alert('Invalid OTP. Please try again.');
+            }
+        }
+
+        function showConfirmation() {
+            document.getElementById('otpScreen').classList.add('hidden');
+            document.getElementById('confirmationScreen').classList.remove('hidden');
+        }
+
+        function goHome() {
+            document.getElementById('confirmationScreen').classList.add('hidden');
+            document.getElementById('locationScreen').classList.remove('hidden');
+            resetForms();
+        }
+
+        function resetForms() {
+            document.getElementById('locationForm').reset();
+            document.getElementById('donationForm').reset();
+            document.getElementById('otpForm').reset();
+            document.getElementById('bookSetContainer').innerHTML = `
+                <div class="book-set">
+                    <input type="text" name="bookType[]" placeholder="Type Of Book" required>
+                    <select name="language[]" class="plus-symbol" required>
+                        <option value="" disabled selected>Language</option>
+                        <option value="English">English</option>
+                        <option value="Spanish">Spanish</option>
+                    </select>
+                    <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required class="plus-symbol">
+                    <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

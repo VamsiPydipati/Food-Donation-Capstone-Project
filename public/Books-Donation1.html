@@ -114,7 +114,7 @@
             border-radius: 4px;
         }
 
-        .book-set input, .book-set select {
+        .book-set select, .book-set input {
             flex: 1 1 20%;
         }
 
@@ -150,6 +150,22 @@
             color: red;
             margin-left: 5px;
         }
+
+        /* Styles for the add button */
+        #addBookSetBtn {
+            background-color: #008000;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        #addBookSetBtn:hover {
+            background-color: #006400;
+        }
     </style>
 </head>
 <body>
@@ -163,7 +179,7 @@
                 <h1>Donate Books</h1>
                 <p>Please help us in knowing your location so that we can show all book donation campaigns running in your chosen area.</p>
                 <form id="locationForm" class="horizontal-group">
-                    <select id="state" name="state" required>
+                    <select id="state" name="state" required onchange="updateCities()">
                         <option value="" disabled selected>Select State</option>
                         <option value="Delhi">Delhi</option>
                         <option value="Maharashtra">Maharashtra</option>
@@ -172,10 +188,7 @@
                     </select>
                     <select id="city" name="city" required>
                         <option value="" disabled selected>Select City</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Bangalore">Bangalore</option>
-                        <option value="Chennai">Chennai</option>
+                        <!-- City options will be populated dynamically -->
                     </select>
                     <button type="button" onclick="validateLocationForm()">Next</button>
                 </form>
@@ -191,7 +204,14 @@
                     </div>
                     <div id="bookSetContainer">
                         <div class="book-set">
-                            <input type="text" name="bookType[]" placeholder="Type Of Book" required>
+                            <select name="bookType[]" required>
+                                <option value="" disabled selected>Type Of Book</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Social Studies">Social Studies</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Literature">Literature</option>
+                                <option value="History">History</option>
+                            </select>
                             <select name="language[]" class="plus-symbol" required>
                                 <option value="" disabled selected>Language</option>
                                 <option value="English">English</option>
@@ -201,7 +221,11 @@
                             <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
                         </div>
                     </div>
-                    <input type="text" id="deliveryMode" name="deliveryMode" placeholder="Delivery Mode" class="full-width" required>
+
+                    <!-- Add Book Set Button -->
+                    <button type="button" id="addBookSetBtn" onclick="addBookSet()">Add Another Book</button>
+            
+                    
                     <textarea id="address" name="address" placeholder="Address" required class="full-width plus-symbol"></textarea>
                     <label>
                         <input type="checkbox" id="terms" name="terms" required class="plus-symbol">
@@ -235,36 +259,74 @@
     <script>
         let generatedOTP;
 
-        function validateLocationForm() {
-            const state = document.getElementById('state').value;
-            const city = document.getElementById('city').value;
-            if (!state || !city) {
-                alert('Please select both state and city.');
-                return;
+        // Object containing cities for each state
+        const citiesByState = {
+            "Delhi": ["Delhi"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+            "Karnataka": ["Bangalore", "Mysore", "Mangalore"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"]
+        };
+
+        function updateCities() {
+            const stateSelect = document.getElementById("state");
+            const citySelect = document.getElementById("city");
+            const selectedState = stateSelect.value;
+
+            // Clear previous city options
+            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
+
+            // Populate city options based on selected state
+            if (citiesByState[selectedState]) {
+                citiesByState[selectedState].forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
             }
-            showDonationForm();
         }
 
-        function showDonationForm() {
-            document.getElementById('locationScreen').classList.add('hidden');
-            document.getElementById('donationFormScreen').classList.remove('hidden');
+        function validateLocationForm() {
+            const state = document.getElementById("state").value;
+            const city = document.getElementById("city").value;
+
+            if (!state || !city) {
+                alert("Please select both state and city.");
+                return;
+            }
+
+            // Hide location screen and show donation form screen
+            document.getElementById("locationScreen").classList.add("hidden");
+            document.getElementById("donationFormScreen").classList.remove("hidden");
         }
 
         function addBookSet() {
-            const bookSetContainer = document.getElementById('bookSetContainer');
-            const bookSet = document.createElement('div');
-            bookSet.classList.add('book-set');
-            bookSet.innerHTML = `
-                <input type="text" name="bookType[]" placeholder="Type Of Book" required>
-                <select name="language[]" class="plus-symbol" required>
+            const bookSetContainer = document.getElementById("bookSetContainer");
+
+            // Create new book set div
+            const newBookSet = document.createElement("div");
+            newBookSet.classList.add("book-set");
+
+            newBookSet.innerHTML = `
+                <select name="bookType[]" required>
+                    <option value="" disabled selected>Type Of Book</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Social Studies">Social Studies</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Literature">Literature</option>
+                    <option value="History">History</option>
+                </select>
+                <select name="language[]" required>
                     <option value="" disabled selected>Language</option>
                     <option value="English">English</option>
                     <option value="Spanish">Spanish</option>
                 </select>
-                <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required class="plus-symbol">
+                <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required>
                 <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
             `;
-            bookSetContainer.appendChild(bookSet);
+
+            // Append new book set to container
+            bookSetContainer.appendChild(newBookSet);
         }
 
         function removeBookSet(button) {
@@ -273,63 +335,45 @@
         }
 
         function sendOTP() {
-            const terms = document.getElementById('terms').checked;
-            if (!terms) {
-                alert('Please accept the terms and conditions.');
+            const mobileNumber = document.getElementById("mobileNumber").value;
+
+            if (!mobileNumber) {
+                alert("Please enter your mobile number.");
                 return;
             }
 
-            const mobileNumber = document.getElementById('mobileNumber').value;
-            if (mobileNumber) {
-                generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-                alert(`OTP sent to ${mobileNumber}: ${generatedOTP}`); // Simulate OTP sent. Replace with actual OTP sending logic.
-                showOTPScreen();
-            } else {
-                alert('Please enter your mobile number.');
-            }
-        }
+            // Generate a random 6-digit OTP
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
-        function showOTPScreen() {
-            document.getElementById('donationFormScreen').classList.add('hidden');
-            document.getElementById('otpScreen').classList.remove('hidden');
+            // For now, just alert the OTP (in a real-world scenario, the OTP would be sent to the mobile number)
+            alert("OTP Sent: " + generatedOTP);
+
+            // Hide donation form screen and show OTP screen
+            document.getElementById("donationFormScreen").classList.add("hidden");
+            document.getElementById("otpScreen").classList.remove("hidden");
         }
 
         function validateOTP() {
-            const enteredOTP = document.getElementById('otp').value;
+            const enteredOTP = document.getElementById("otp").value;
+
             if (enteredOTP === generatedOTP) {
-                showConfirmation();
+                // Hide OTP screen and show confirmation screen
+                document.getElementById("otpScreen").classList.add("hidden");
+                document.getElementById("confirmationScreen").classList.remove("hidden");
             } else {
-                alert('Invalid OTP. Please try again.');
+                alert("Invalid OTP. Please try again.");
             }
         }
 
-        function showConfirmation() {
-            document.getElementById('otpScreen').classList.add('hidden');
-            document.getElementById('confirmationScreen').classList.remove('hidden');
-        }
-
         function goHome() {
-            document.getElementById('confirmationScreen').classList.add('hidden');
-            document.getElementById('locationScreen').classList.remove('hidden');
-            resetForms();
-        }
-
-        function resetForms() {
-            document.getElementById('locationForm').reset();
-            document.getElementById('donationForm').reset();
-            document.getElementById('otpForm').reset();
-            document.getElementById('bookSetContainer').innerHTML = `
-                <div class="book-set">
-                    <input type="text" name="bookType[]" placeholder="Type Of Book" required>
-                    <select name="language[]" class="plus-symbol" required>
-                        <option value="" disabled selected>Language</option>
-                        <option value="English">English</option>
-                        <option value="Spanish">Spanish</option>
-                    </select>
-                    <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required class="plus-symbol">
-                    <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
-                </div>
-            `;
+            // Reset all forms and go back to the location screen
+            document.getElementById("locationForm").reset();
+            document.getElementById("donationForm").reset();
+            document.getElementById("otpForm").reset();
+            document.getElementById("locationScreen").classList.remove("hidden");
+            document.getElementById("donationFormScreen").classList.add("hidden");
+            document.getElementById("otpScreen").classList.add("hidden");
+            document.getElementById("confirmationScreen").classList.add("hidden");
         }
     </script>
 </body>
