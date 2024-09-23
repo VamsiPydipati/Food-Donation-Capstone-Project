@@ -80,24 +80,6 @@
             display: none;
         }
 
-        .social {
-            background-color: #3b3b3b;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .social a {
-            margin: 0 10px;
-            color: white;
-            text-decoration: none;
-            font-size: 24px;
-        }
-
-        .social a:hover {
-            color: #cccccc;
-        }
-
         .message {
             background-color: #f0f8ff;
             padding: 20px;
@@ -152,7 +134,7 @@
         }
 
         /* Styles for the add button */
-        #addBookSetBtn {
+        #addClothingSetBtn {
             background-color: #008000;
             color: white;
             padding: 10px;
@@ -163,7 +145,7 @@
             transition: background-color 0.3s ease;
         }
 
-        #addBookSetBtn:hover {
+        #addClothingSetBtn:hover {
             background-color: #006400;
         }
     </style>
@@ -251,7 +233,7 @@
                 <p>Please enter the OTP sent to your mobile number.</p>
                 <form id="otpForm" class="horizontal-group">
                     <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
-                    <button type="button" onclick="validateOTP()">Confirm</button>
+                    <button id="confirmButton" type="button" onclick="validateOTP()">Confirm</button>
                 </form>
             </div>
 
@@ -265,155 +247,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        let generatedOTP;
-
-        // Object containing states and cities
-        const statesAndCities = {
-            "Delhi": ["Delhi"],
-            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
-            "Karnataka": ["Bangalore", "Mysore", "Mangalore"],
-            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
-            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Tirupati"],
-            "Gujarat": ["Ahmedabad", "Gandhinagar", "Surat"],
-            "Telangana": ["Hyderabad"],
-            "West Bengal": ["Kolkata"]
-        };
-
-        // Populate states select dropdown and sort options
-        function populateStates() {
-            const stateSelect = document.getElementById("state");
-            const states = Object.keys(statesAndCities).sort(); // Sort states alphabetically
-
-            states.forEach(state => {
-                const option = document.createElement("option");
-                option.value = state;
-                option.textContent = state;
-                stateSelect.appendChild(option);
-            });
-        }
-
-        function updateCities() {
-            const stateSelect = document.getElementById("state");
-            const citySelect = document.getElementById("city");
-            const selectedState = stateSelect.value;
-
-            // Clear previous city options
-            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
-
-            // Populate city options based on selected state and sort them
-            if (statesAndCities[selectedState]) {
-                const cities = statesAndCities[selectedState].sort(); // Sort cities alphabetically
-                cities.forEach(city => {
-                    const option = document.createElement("option");
-                    option.value = city;
-                    option.textContent = city;
-                    citySelect.appendChild(option);
-                });
-            }
-        }
-
-        function validateLocationForm() {
-            const state = document.getElementById("state").value;
-            const city = document.getElementById("city").value;
-
-            if (!state || !city) {
-                alert("Please select both state and city.");
-                return;
-            }
-
-            // Hide location screen and show donation form screen
-            document.getElementById("locationScreen").classList.add("hidden");
-            document.getElementById("donationFormScreen").classList.remove("hidden");
-        }
-
-        function addClothingSet() {
-            const clothesSetContainer = document.getElementById("clothesSetContainer");
-
-            // Create new clothing set div
-            const newClothingSet = document.createElement("div");
-            newClothingSet.classList.add("book-set");
-
-            newClothingSet.innerHTML = `
-                <select name="clothingType[]" required>
-                    <option value="" disabled selected>Type Of Clothing</option>
-                    <option value="Shirt">Shirt</option>
-                    <option value="T-Shirt">T-Shirt</option>
-                    <option value="Pants">Pants</option>
-                    <option value="Shorts">Shorts</option>
-                    <option value="Jacket">Jacket</option>
-                    <option value="Sweater">Sweater</option>
-                    <option value="Dress">Dress</option>
-                    <option value="Skirt">Skirt</option>
-                    <option value="Suits">Suits</option>
-                    <option value="Coat">Coat</option>
-                </select>
-                <select name="size[]" class="plus-symbol" required>
-                    <option value="" disabled selected>Size</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XXL">XXL</option>
-                </select>
-                <input type="number" name="numberOfClothes[]" placeholder="Number Of Clothes" required>
-                <button type="button" class="remove-btn" onclick="removeClothingSet(this)">x</button>
-            `;
-
-            // Append new clothing set to container
-            clothesSetContainer.appendChild(newClothingSet);
-        }
-
-        function removeClothingSet(button) {
-            const clothingSet = button.parentElement;
-            clothingSet.remove();
-        }
-
-        function sendOTP() {
-            const mobileNumber = document.getElementById("mobileNumber").value;
-
-            if (!mobileNumber) {
-                alert("Please enter your mobile number.");
-                return;
-            }
-
-            // Generate a random 6-digit OTP
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-
-            // For now, just alert the OTP (in a real-world scenario, the OTP would be sent to the mobile number)
-            alert("OTP Sent: " + generatedOTP);
-
-            // Hide donation form screen and show OTP screen
-            document.getElementById("donationFormScreen").classList.add("hidden");
-            document.getElementById("otpScreen").classList.remove("hidden");
-        }
-
-        function validateOTP() {
-            const enteredOTP = document.getElementById("otp").value;
-
-            if (enteredOTP === generatedOTP) {
-                // Hide OTP screen and show confirmation screen
-                document.getElementById("otpScreen").classList.add("hidden");
-                document.getElementById("confirmationScreen").classList.remove("hidden");
-            } else {
-                alert("Invalid OTP. Please try again.");
-            }
-        }
-
-        function goHome() {
-            // Reset all forms and go back to the location screen
-            document.getElementById("locationForm").reset();
-            document.getElementById("donationForm").reset();
-            document.getElementById("otpForm").reset();
-            document.getElementById("locationScreen").classList.remove("hidden");
-            document.getElementById("donationFormScreen").classList.add("hidden");
-            document.getElementById("otpScreen").classList.add("hidden");
-            document.getElementById("confirmationScreen").classList.add("hidden");
-        }
-
-        // Populate states on page load
-        window.onload = populateStates;
-    </script>
 </body>
 </html>

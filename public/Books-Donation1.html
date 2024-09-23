@@ -4,200 +4,163 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Donation Platform</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+        /* Reset some default browser styling */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        .container {
-            background-color: #ffffff;
-            width: 80%;
-            margin: 50px auto;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        header, footer {
-            background-color: #800000;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-        }
-
-        .content {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
             padding: 20px;
         }
 
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
         h1 {
+            font-size: 20px;
             margin-bottom: 20px;
         }
 
         p {
-            color: #555555;
+            margin-bottom: 20px;
         }
 
+        /* Form styling */
         form {
             display: flex;
             flex-direction: column;
         }
 
-        input, select, textarea, button {
-            margin-bottom: 15px;
+        form select, form input, form textarea, button {
             padding: 10px;
-            border: 1px solid #dddddd;
+            margin-bottom: 15px;
             border-radius: 4px;
+            border: 1px solid #ccc;
             font-size: 16px;
+            width: 100%;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
         }
 
         button {
-            background-color: #800000;
+            background-color: #4CAF50;
             color: white;
-            border: none;
-            cursor: pointer;
-            padding: 15px;
             font-size: 16px;
+            cursor: pointer;
+            border: none;
             transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #600000;
+            background-color: #45a049;
         }
 
-        label {
+        /* Horizontal form group */
+        .horizontal-group {
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
         }
 
-        label input {
-            margin-right: 10px;
+        .horizontal-group input,
+        .horizontal-group select {
+            flex: 1;
         }
 
+        /* Book set container */
+        .book-set {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .book-set select, .book-set input {
+            flex: 1;
+        }
+
+        .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            padding: 10px;
+        }
+
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Screen visibility management */
         .hidden {
             display: none;
         }
 
-        .social {
-            background-color: #3b3b3b;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .social a {
-            margin: 0 10px;
-            color: white;
-            text-decoration: none;
-            font-size: 24px;
-        }
-
-        .social a:hover {
-            color: #cccccc;
-        }
-
-        .message {
-            background-color: #f0f8ff;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .book-set {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #dddddd;
-            border-radius: 4px;
-        }
-
-        .book-set select, .book-set input {
-            flex: 1 1 20%;
-        }
-
-        .book-set .remove-btn {
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .book-set .remove-btn:hover {
-            background-color: #cc0000;
-        }
-
-        .horizontal-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .horizontal-group input, .horizontal-group select, .horizontal-group textarea, .horizontal-group button {
-            flex: 1;
-        }
-
-        .full-width {
+        /* Footer-style confirmation button */
+        #confirmationScreen button {
+            display: block;
             width: 100%;
-        }
-
-        .plus-symbol::after {
-            content: "+";
-            color: red;
-            margin-left: 5px;
-        }
-
-        /* Styles for the add button */
-        #addBookSetBtn {
-            background-color: #008000;
-            color: white;
             padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
+            font-size: 18px;
         }
 
-        #addBookSetBtn:hover {
-            background-color: #006400;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Donate Book</h1>
+            <h1>Donate Books</h1>
         </header>
         <div class="content">
             <!-- Location Screen -->
             <div id="locationScreen">
-                <h1>Donate Books</h1>
-                <p>Please help us in knowing your location so that we can show all book donation campaigns running in your chosen area.</p>
+                <h1>Select Your Location</h1>
                 <form id="locationForm" class="horizontal-group">
                     <select id="state" name="state" required onchange="updateCities()">
                         <option value="" disabled selected>Select State</option>
-                        <!-- State options will be populated dynamically -->
+                        <!-- State options will be populated here -->
                     </select>
                     <select id="city" name="city" required>
                         <option value="" disabled selected>Select City</option>
-                        <!-- City options will be populated dynamically -->
                     </select>
-                    <button type="button" onclick="validateLocationForm()">Next</button>
+                    <button type="button" id="nextButton" onclick="validateLocationForm()">Next</button>
                 </form>
             </div>
 
             <!-- Donation Form Screen -->
             <div id="donationFormScreen" class="hidden">
-                <h1>Donate Books</h1>
+                <h1>Enter Donation Details</h1>
                 <form id="donationForm">
                     <div class="horizontal-group">
-                        <input type="text" id="donorName" name="donorName" placeholder="Name of the Donor" required class="plus-symbol">
-                        <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number" required class="plus-symbol">
+                        <input type="text" id="donorName" name="donorName" placeholder="Donor Name" required>
+                        <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number" required>
                     </div>
                     <div id="bookSetContainer">
                         <div class="book-set">
@@ -209,189 +172,37 @@
                                 <option value="Literature">Literature</option>
                                 <option value="History">History</option>
                             </select>
-                            <select name="language[]" required class="plus-symbol">
+                            <select name="language[]" required>
                                 <option value="" disabled selected>Language</option>
                                 <option value="English">English</option>
                                 <option value="Spanish">Spanish</option>
                             </select>
-                            <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required class="plus-symbol">
-                            <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
+                            <input type="number" name="numberOfBooks[]" placeholder="No. of Books" required min="1">
                         </div>
                     </div>
-
-                    <!-- Add Book Set Button -->
-                    <button type="button" id="addBookSetBtn" onclick="addBookSet()">Add Another Book</button>
-                    
-                    <textarea id="address" name="address" placeholder="Address" required class="full-width plus-symbol"></textarea>
-                    <label>
-                        <input type="checkbox" id="terms" name="terms" required class="plus-symbol">
-                        Accept Terms & Conditions
-                    </label>
-                    <button type="button" onclick="sendOTP()">Next</button>
+                    <button type="button" onclick="addBookSet()">+ Add Another Book</button>
+                    <textarea id="address" name="address" placeholder="Pickup Address" required></textarea>
+                    <button type="button" onclick="sendOTP()">Send OTP</button>
                 </form>
             </div>
 
-            <!-- OTP Confirmation Screen -->
+            <!-- OTP Screen -->
             <div id="otpScreen" class="hidden">
-                <h1>OTP Confirmation</h1>
-                <p>Please enter the OTP sent to your mobile number.</p>
-                <form id="otpForm" class="horizontal-group">
+                <h1>Verify OTP</h1>
+                <form id="otpForm">
                     <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
-                    <button type="button" onclick="validateOTP()">Confirm</button>
+                    <button type="button" onclick="validateOTP()">Validate OTP</button>
                 </form>
             </div>
 
             <!-- Confirmation Screen -->
             <div id="confirmationScreen" class="hidden">
-                <div class="message">
-                    <h1>Thank You!</h1>
-                    <p>We have received your Book Donation Request and our team will shortly connect with you. Thank you and have a great day ahead!</p>
-                    <button onclick="goHome()">Home</button>
-                </div>
+                <h1>Thank You!</h1>
+                <p>Your donation details have been saved successfully.</p>
+                <button type="button" onclick="goHome()">Go to Home</button>
             </div>
         </div>
     </div>
-
-    <script>
-        let generatedOTP;
-
-        // Object containing states and cities
-        const statesAndCities = {
-            "Delhi": ["Delhi"],
-            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
-            "Karnataka": ["Bangalore", "Mysore", "Mangalore"],
-            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
-            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Tirupati"],
-            "Gujarat": ["Ahmedabad", "Gandhinagar", "Surat"],
-            "Telangana": ["Hyderabad"],
-            "West Bengal": ["Kolkata"]
-        };
-
-        // Populate states select dropdown and sort options
-        function populateStates() {
-            const stateSelect = document.getElementById("state");
-            const states = Object.keys(statesAndCities).sort(); // Sort states alphabetically
-
-            states.forEach(state => {
-                const option = document.createElement("option");
-                option.value = state;
-                option.textContent = state;
-                stateSelect.appendChild(option);
-            });
-        }
-
-        function updateCities() {
-            const stateSelect = document.getElementById("state");
-            const citySelect = document.getElementById("city");
-            const selectedState = stateSelect.value;
-
-            // Clear previous city options
-            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
-
-            // Populate city options based on selected state and sort them
-            if (statesAndCities[selectedState]) {
-                const cities = statesAndCities[selectedState].sort(); // Sort cities alphabetically
-                cities.forEach(city => {
-                    const option = document.createElement("option");
-                    option.value = city;
-                    option.textContent = city;
-                    citySelect.appendChild(option);
-                });
-            }
-        }
-
-        function validateLocationForm() {
-            const state = document.getElementById("state").value;
-            const city = document.getElementById("city").value;
-
-            if (!state || !city) {
-                alert("Please select both state and city.");
-                return;
-            }
-
-            // Hide location screen and show donation form screen
-            document.getElementById("locationScreen").classList.add("hidden");
-            document.getElementById("donationFormScreen").classList.remove("hidden");
-        }
-
-        function addBookSet() {
-            const bookSetContainer = document.getElementById("bookSetContainer");
-
-            // Create new book set div
-            const newBookSet = document.createElement("div");
-            newBookSet.classList.add("book-set");
-
-            newBookSet.innerHTML = `
-                <select name="bookType[]" required>
-                    <option value="" disabled selected>Type Of Book</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Social Studies">Social Studies</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Literature">Literature</option>
-                    <option value="History">History</option>
-                </select>
-                <select name="language[]" required>
-                    <option value="" disabled selected>Language</option>
-                    <option value="English">English</option>
-                    <option value="Spanish">Spanish</option>
-                </select>
-                <input type="number" name="numberOfBooks[]" placeholder="Number Of Books" required>
-                <button type="button" class="remove-btn" onclick="removeBookSet(this)">x</button>
-            `;
-
-            // Append new book set to container
-            bookSetContainer.appendChild(newBookSet);
-        }
-
-        function removeBookSet(button) {
-            const bookSet = button.parentElement;
-            bookSet.remove();
-        }
-
-        function sendOTP() {
-            const mobileNumber = document.getElementById("mobileNumber").value;
-
-            if (!mobileNumber) {
-                alert("Please enter your mobile number.");
-                return;
-            }
-
-            // Generate a random 6-digit OTP
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-
-            // For now, just alert the OTP (in a real-world scenario, the OTP would be sent to the mobile number)
-            alert("OTP Sent: " + generatedOTP);
-
-            // Hide donation form screen and show OTP screen
-            document.getElementById("donationFormScreen").classList.add("hidden");
-            document.getElementById("otpScreen").classList.remove("hidden");
-        }
-
-        function validateOTP() {
-            const enteredOTP = document.getElementById("otp").value;
-
-            if (enteredOTP === generatedOTP) {
-                // Hide OTP screen and show confirmation screen
-                document.getElementById("otpScreen").classList.add("hidden");
-                document.getElementById("confirmationScreen").classList.remove("hidden");
-            } else {
-                alert("Invalid OTP. Please try again.");
-            }
-        }
-
-        function goHome() {
-            // Reset all forms and go back to the location screen
-            document.getElementById("locationForm").reset();
-            document.getElementById("donationForm").reset();
-            document.getElementById("otpForm").reset();
-            document.getElementById("locationScreen").classList.remove("hidden");
-            document.getElementById("donationFormScreen").classList.add("hidden");
-            document.getElementById("otpScreen").classList.add("hidden");
-            document.getElementById("confirmationScreen").classList.add("hidden");
-        }
-
-        // Populate states on page load
-        window.onload = populateStates;
-    </script>
+    <script src="Books-donation1.js" type="module"></script>
 </body>
 </html>
